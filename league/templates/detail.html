@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: #f5f7fb;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    .title {
+        text-align: center;
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        transition: 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .manager-section {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .manager-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #4CAF50;
+    }
+
+    .manager-info h3 {
+        margin: 0;
+    }
+
+    .team-name {
+        text-align: center;
+        font-size: 28px;
+        margin: 20px 0;
+    }
+
+    .players-list p {
+        background: #f0f3ff;
+        padding: 10px;
+        border-radius: 8px;
+        margin: 8px 0;
+    }
+
+    .back-btn {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 18px;
+        background: #4CAF50;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+    .back-btn:hover {
+        background: #388e3c;
+    }
+</style>
+
+<div class="container">
+
+    <div class="title">🏆 {{ team.name }}</div>
+
+    <!-- Manager Profile -->
+    <div class="card manager-section">
+        {% if manager.image %}
+            <img src="{{ manager.image.url }}" class="manager-img">
+        {% else %}
+            <img src="https://via.placeholder.com/120" class="manager-img">
+        {% endif %}
+
+    <div class="manager-info">
+        <h3>👔 {{ manager.name }}</h3>
+        <p>🙎 Age: {{ manager.age }}</p>
+        <p>📞 Contact: {{ manager.contact }}</p>
+        <p>📩 Email: {{ manager.email }}</p>
+    </div>
+    </div>
+
+    <!-- Players -->
+    <div class="card">
+        <h2>⚽ Players List</h2>
+
+        <div class="players-list">
+            {% for p in players %}
+                <p>👤 <b>{{ p.name }}</b> — {{ p.position }}</p>
+            {% empty %}
+                <p>No players available</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <div style="text-align:center;">
+        <a href="{% url 'league' %}" class="back-btn">⬅ Back to League Table</a>
+    </div>
+
+</div>
+
+{% endblock %}

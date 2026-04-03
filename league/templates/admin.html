@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* Premium UI Styling */
+    :root {
+        --primary: #2c3e50;
+        --accent: #27ae60;
+        --danger: #e74c3c;
+        --bg-light: #f4f7f6;
+        --white: #ffffff;
+        --shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    body {
+        background-color: var(--bg-light);
+        font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        color: #333;
+    }
+
+    .admin-container {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    .header-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 10px;
+    }
+
+    h2 { color: var(--primary); font-weight: 700; margin: 0; }
+
+    .card {
+        background: var(--white);
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: var(--shadow);
+        border: 1px solid #eee;
+        transition: transform 0.2s;
+    }
+
+    .card h3 {
+        margin-top: 0;
+        font-size: 1.2rem;
+        color: var(--primary);
+        border-left: 4px solid var(--accent);
+        padding-left: 15px;
+        margin-bottom: 20px;
+    }
+
+    /* Form Styling */
+    form p {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    input, select, textarea {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        margin-top: 5px;
+        font-size: 14px;
+    }
+
+    input:focus {
+        border-color: var(--accent);
+        outline: none;
+        box-shadow: 0 0 5px rgba(39, 174, 96, 0.2);
+    }
+
+    button {
+        cursor: pointer;
+        padding: 10px 20px;
+        border-radius: 6px;
+        border: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-save {
+        background-color: var(--accent);
+        color: white;
+        width: 100%;
+    }
+
+    .btn-save:hover { background-color: #219150; }
+
+    .btn-delete {
+        background-color: transparent;
+        color: var(--danger);
+        border: 1px solid var(--danger);
+        padding: 5px 12px;
+        font-size: 12px;
+    }
+
+    .btn-delete:hover {
+        background-color: var(--danger);
+        color: white;
+    }
+
+    /* Team List Item */
+    .team-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .team-item:last-child { border-bottom: none; }
+
+    .nav-link {
+        text-decoration: none;
+        color: var(--primary);
+        font-weight: bold;
+    }
+</style>
+
+<div class="admin-container">
+    <div class="header-section">
+        <h2>🛠 Admin Management</h2>
+        <a href="{% url 'league' %}" class="nav-link"> Go to League Table ←</a>
+    </div>
+
+    <div class="grid-layout">
+        <div class="card">
+            <h3>Add / Update Team</h3>
+            <form method="post">
+                {% csrf_token %}
+                {{ team_form.as_p }}
+                <button type="submit" name="team_add" class="btn-save">Save Team</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>Add Manager</h3>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ manager_form.as_p }}
+                <button type="submit" name="manager_add" class="btn-save">Save Manager</button>
+            </form>
+            {% if manager_form.errors %}
+                <p style="color:var(--danger)">{{ manager_form.errors }}</p>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <h3>Add Player</h3>
+            <form method="post">
+                {% csrf_token %}
+                {{ player_form.as_p }}
+                <button type="submit" name="player_add" class="btn-save">Save Player</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3>Existing Teams</h3>
+            <div class="team-list">
+                {% for t in teams %}
+                    <div class="team-item">
+                        <span><b>{{ t.name }}</b></span>
+                        <form method="post" style="margin:0;">
+                            {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ t.id }}">
+                            <button name="team_delete" class="btn-delete">Delete</button>
+                        </form>
+                    </div>
+                {% empty %}
+                    <p>No teams added yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

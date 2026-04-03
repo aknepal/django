@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: #f4f6fb;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    .title {
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .table-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    thead {
+        background: #1e1e2f;
+        color: white;
+    }
+
+    th, td {
+        padding: 14px;
+        text-align: center;
+    }
+
+    tbody tr {
+        transition: 0.2s;
+    }
+
+    tbody tr:nth-child(even) {
+        background: #f8ffff;
+    }
+
+    tbody tr:hover {
+        background: #e6ecff;
+        transform: scale(1.01);
+    }
+
+    th {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    .team-name {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .points {
+        font-weight: bold;
+        color: #4CAF50;
+    }
+
+    .btn {
+        padding: 6px 12px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: 0.3s;
+    }
+
+    .btn-view {
+        background: #4CAF50;
+        color: white;
+    }
+
+    .btn-view:hover {
+        background: #388e3c;
+    }
+
+    .back-btn {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 18px;
+        background: #1e1e2f;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+    }
+
+    .back-btn:hover {
+        background: #000;
+    }
+</style>
+
+<div class="container">
+
+    <div class="title">📊 League Table</div>
+
+    <div class="table-card">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Team</th>
+                    <th>Played</th>
+                    <th>Win</th>
+                    <th>Draw</th>
+                    <th>Lose</th>
+                    <th>GD</th>
+                    <th>Points</th>
+                    <th>Players List</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for t in teams %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td class="team-name">⚽ {{ t.name }}</td>
+                    <td>{{ t.played }}</td>
+                    <td>{{ t.win }}</td>
+                    <td>{{ t.draw }}</td>
+                    <td>{{ t.lose }}</td>
+                    <td>{{ t.goal_difference }}</td>
+                    <td class="points">{{ t.points }}</td>
+                    <td>
+                        <a href="{% url 'detail' t.id %}" class="btn btn-view">
+                            View
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="9">No teams available</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="{% url 'admin_page' %}" class="back-btn">⬅ Back to Admin</a>
+
+</div>
+
+{% endblock %}
