@@ -490,9 +490,61 @@
             </div>
             {% endif %}
         </div>
+<<<<<<< HEAD
+=======
     </div>
 </div>
 
+<!-- DETAIL GRID -->
+<div class="detail-grid">
+
+    <!-- MANAGER CARD -->
+    <div class="manager-card">
+        <div class="manager-card-header">
+            <div class="section-icon">👔</div>
+            <div class="section-title">Manager</div>
+        </div>
+        <div class="manager-card-body">
+            <div class="manager-avatar-wrap">
+                {% if manager.image %}
+                    <img src="{{ manager.image.url }}" class="manager-img" alt="{{ manager.name }}">
+                {% else %}
+                    <img src="https://ui-avatars.com/api/?name={{ manager.name }}&background=0a1628&color=00b4ff&size=100&bold=true&rounded=true" class="manager-img" alt="{{ manager.name }}">
+                {% endif %}
+                <div class="manager-badge">👔</div>
+            </div>
+
+            <div class="manager-name">{{ manager.name }}</div>
+
+            <div class="manager-details">
+                <div class="detail-row">
+                    <div class="detail-row-icon">🎂</div>
+                    <div class="detail-row-content">
+                        <div class="detail-row-label">Age</div>
+                        <div class="detail-row-value">{{ manager.age }} years old</div>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-row-icon">📞</div>
+                    <div class="detail-row-content">
+                        <div class="detail-row-label">Contact</div>
+                        <div class="detail-row-value">{{ manager.contact }}</div>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-row-icon">📩</div>
+                    <div class="detail-row-content">
+                        <div class="detail-row-label">Email</div>
+                        <div class="detail-row-value">{{ manager.email }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+>>>>>>> be9b6e3f3a7b5337846f527d61839c6b66ba69d6
+    </div>
+</div>
+
+<<<<<<< HEAD
 <!-- DETAIL GRID -->
 <div class="detail-grid">
 
@@ -580,6 +632,48 @@
         </div>
     </div>
 
+=======
+    <!-- PLAYERS CARD -->
+    <div class="players-card">
+        <div class="players-card-header">
+            <div class="players-card-header-left">
+                <div class="section-icon" style="background: rgba(0,200,83,0.12);">⚽</div>
+                <div class="section-title">Squad</div>
+            </div>
+            {% if players %}
+                <span class="player-count-badge">{{ players|length }} players</span>
+            {% endif %}
+        </div>
+
+        <div class="players-list">
+            {% for p in players %}
+            <div class="player-item">
+                <div class="player-number">{{ forloop.counter }}</div>
+                <div class="player-avatar">👤</div>
+                <div class="player-info">
+                    <div class="player-name">{{ p.name }}</div>
+                    <div class="player-position">{{ p.position }}</div>
+                </div>
+                <span class="position-pill
+                    {% with pos=p.position|lower %}
+                        {% if 'keeper' in pos or 'gk' in pos or 'goal' in pos %}pos-gk
+                        {% elif 'def' in pos or 'back' in pos or 'cb' in pos or 'lb' in pos or 'rb' in pos %}pos-def
+                        {% elif 'mid' in pos or 'cm' in pos or 'dm' in pos or 'am' in pos %}pos-mid
+                        {% elif 'fwd' in pos or 'forward' in pos or 'striker' in pos or 'st' in pos or 'winger' in pos %}pos-fwd
+                        {% else %}pos-mid{% endif %}
+                    {% endwith %}
+                ">{{ p.position }}</span>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <span class="empty-icon">👟</span>
+                No players registered for this team yet.
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+>>>>>>> be9b6e3f3a7b5337846f527d61839c6b66ba69d6
 </div>
 
 {% endblock %}

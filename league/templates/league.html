@@ -337,11 +337,103 @@
     <div>
         <div class="page-eyebrow">2026 Season</div>
         <div class="page-title">League Table</div>
+<<<<<<< HEAD
     </div>
     <div class="header-right">
         <div class="season-pill">🏆 Championship</div>
         <a href="{% url 'admin_page' %}" class="back-btn">⬅ Admin</a>
     </div>
+</div>
+
+<!-- TABLE CARD -->
+<div class="table-card">
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Team</th>
+                <th class="hide-sm">Played</th>
+                <th>W</th>
+                <th class="hide-sm">D</th>
+                <th class="hide-sm">L</th>
+                <th>GD</th>
+                <th>Pts</th>
+                <th>Squad</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in teams %}
+            <tr class="{% if forloop.counter == 1 %}rank-1{% elif forloop.counter == 2 %}rank-2{% elif forloop.counter == 3 %}rank-3{% endif %}">
+
+                <!-- RANK -->
+                <td>
+                    <div class="rank-cell">
+                        <span class="rank-medal {% if forloop.counter == 1 %}rank-1{% elif forloop.counter == 2 %}rank-2{% elif forloop.counter == 3 %}rank-3{% else %}rank-n{% endif %}">
+                            {{ forloop.counter }}
+                        </span>
+                    </div>
+                </td>
+
+                <!-- TEAM -->
+                <td>
+                    <div class="team-cell">
+                        <div class="team-crest">🛡</div>
+                        <span class="team-name">{{ t.name }}</span>
+                    </div>
+                </td>
+
+                <!-- STATS -->
+                <td class="stat-played hide-sm">{{ t.played }}</td>
+                <td class="stat-win">{{ t.win }}</td>
+                <td class="stat-draw hide-sm">{{ t.draw }}</td>
+                <td class="stat-lose hide-sm">{{ t.lose }}</td>
+
+                <!-- GOAL DIFFERENCE -->
+                <td class="{% if t.goal_difference > 0 %}gd-positive{% elif t.goal_difference < 0 %}gd-negative{% else %}gd-zero{% endif %}">
+                    {% if t.goal_difference > 0 %}+{% endif %}{{ t.goal_difference }}
+                </td>
+
+                <!-- POINTS -->
+                <td>
+                    <span class="points-badge">{{ t.points }}</span>
+                </td>
+
+                <!-- VIEW -->
+                <td>
+                    <a href="{% url 'detail' t.id %}" class="btn-view">
+                        Squad →
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr class="empty-row">
+                <td colspan="9">
+                    <span class="empty-icon">🏟</span>
+                    No teams have been added yet.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- FOOTER -->
+    <div class="table-footer">
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot dot-gold"></div> Champion</div>
+            <div class="legend-item"><div class="legend-dot dot-green"></div> Promotion Zone</div>
+            <div class="legend-item"><div class="legend-dot dot-red"></div> Relegation Zone</div>
+        </div>
+        <div class="table-count">
+            {{ teams|length }} team{% if teams|length != 1 %}s{% endif %} registered
+        </div>
+    </div>
+=======
+    </div>
+    <div class="header-right">
+        <div class="season-pill">🏆 Championship</div>
+        <a href="{% url 'admin_page' %}" class="back-btn">⬅ Admin</a>
+    </div>
+>>>>>>> be9b6e3f3a7b5337846f527d61839c6b66ba69d6
 </div>
 
 <!-- TABLE CARD -->
