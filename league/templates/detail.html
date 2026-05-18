@@ -1,122 +1,583 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
 <style>
-    body {
-        font-family: 'Segoe UI', sans-serif;
-        background: #f5f7fb;
-    }
-
-    .container {
-        max-width: 900px;
-        margin: auto;
-        padding: 20px;
-    }
-
-    .title {
-        text-align: center;
-        font-size: 32px;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-
-    .card {
-        background: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        margin-bottom: 20px;
-        transition: 0.3s;
-    }
-
-    .card:hover {
-        transform: translateY(-5px);
-    }
-
-    .manager-section {
+    /* ─── PAGE HEADER ─── */
+    .page-header {
         display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 18px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.09);
+        color: var(--electric-blue);
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background 0.2s, transform 0.2s, border-color 0.2s;
+    }
+
+    .back-btn:hover {
+        background: rgba(0,180,255,0.1);
+        border-color: rgba(0,180,255,0.3);
+        transform: translateX(-3px);
+    }
+
+    /* ─── TEAM HERO BANNER ─── */
+    .team-hero {
+        position: relative;
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 22px;
+        overflow: hidden;
+        padding: 36px 36px 32px;
+        margin-bottom: 22px;
+        backdrop-filter: blur(20px);
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        flex-wrap: wrap;
+    }
+
+    /* Decorative glow behind crest */
+    .team-hero::before {
+        content: '';
+        position: absolute;
+        top: -60px;
+        left: -60px;
+        width: 260px;
+        height: 260px;
+        background: radial-gradient(circle, rgba(0,180,255,0.12), transparent 70%);
+        pointer-events: none;
+    }
+
+    .team-hero::after {
+        content: '';
+        position: absolute;
+        bottom: -40px;
+        right: -40px;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(0,200,83,0.08), transparent 70%);
+        pointer-events: none;
+    }
+
+    .team-crest-large {
+        width: 88px;
+        height: 88px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, rgba(0,180,255,0.2), rgba(0,200,83,0.15));
+        border: 1px solid rgba(255,255,255,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 40px;
+        flex-shrink: 0;
+        box-shadow: 0 0 30px rgba(0,180,255,0.2);
+        position: relative;
+        z-index: 1;
+    }
+
+    .team-hero-info {
+        flex: 1;
+        min-width: 200px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .team-eyebrow {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--electric-blue);
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .team-eyebrow::before {
+        content: '';
+        display: inline-block;
+        width: 18px;
+        height: 2px;
+        background: var(--electric-blue);
+        border-radius: 2px;
+    }
+
+    .team-title {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: clamp(34px, 5vw, 58px);
+        letter-spacing: 2px;
+        line-height: 0.95;
+        background: linear-gradient(130deg, #fff 0%, #c8d8ff 60%, var(--electric-blue) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .team-hero-stats {
+        display: flex;
+        gap: 28px;
+        margin-top: 16px;
+        flex-wrap: wrap;
+    }
+
+    .hero-stat {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .hero-stat-val {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 26px;
+        color: var(--gold);
+        line-height: 1;
+    }
+
+    .hero-stat-label {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+    }
+
+    /* ─── TWO-COLUMN LAYOUT ─── */
+    .detail-grid {
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        gap: 20px;
+        align-items: start;
+    }
+
+    @media (max-width: 820px) {
+        .detail-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── MANAGER CARD ─── */
+    .manager-card {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 20px;
+        overflow: hidden;
+        backdrop-filter: blur(20px);
+        transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .manager-card:hover {
+        border-color: rgba(0,180,255,0.25);
+        transform: translateY(-3px);
+    }
+
+    .manager-card-header {
+        padding: 16px 22px 14px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        background: rgba(255,255,255,0.02);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .section-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+        background: rgba(0,180,255,0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+    }
+
+    .section-title {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 17px;
+        letter-spacing: 1.5px;
+        color: var(--text-primary);
+    }
+
+    .manager-card-body {
+        padding: 24px 22px;
+        display: flex;
+        flex-direction: column;
         align-items: center;
         gap: 20px;
     }
 
+    .manager-avatar-wrap {
+        position: relative;
+    }
+
     .manager-img {
-        width: 120px;
-        height: 120px;
+        width: 100px;
+        height: 100px;
         border-radius: 50%;
         object-fit: cover;
-        border: 3px solid #4CAF50;
+        border: 3px solid transparent;
+        background-clip: padding-box;
+        box-shadow: 0 0 0 3px rgba(0,180,255,0.35), 0 10px 30px rgba(0,0,0,0.4);
     }
 
-    .manager-info h3 {
-        margin: 0;
+    .manager-badge {
+        position: absolute;
+        bottom: 2px;
+        right: 2px;
+        width: 26px;
+        height: 26px;
+        background: linear-gradient(135deg, var(--electric-blue), #005fa3);
+        border-radius: 50%;
+        border: 2px solid var(--deep-navy);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
     }
 
-    .team-name {
+    .manager-name {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 22px;
+        letter-spacing: 1.5px;
+        color: var(--text-primary);
         text-align: center;
-        font-size: 28px;
-        margin: 20px 0;
     }
 
-    .players-list p {
-        background: #f0f3ff;
-        padding: 10px;
+    .manager-details {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .detail-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 14px;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 10px;
+        transition: background 0.2s;
+    }
+
+    .detail-row:hover {
+        background: rgba(0,180,255,0.06);
+    }
+
+    .detail-row-icon {
+        width: 28px;
+        height: 28px;
+        background: rgba(255,255,255,0.05);
         border-radius: 8px;
-        margin: 8px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        flex-shrink: 0;
     }
 
-    .back-btn {
-        display: inline-block;
-        margin-top: 15px;
-        padding: 10px 18px;
-        background: #4CAF50;
-        color: white;
+    .detail-row-content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .detail-row-label {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        margin-bottom: 1px;
+    }
+
+    .detail-row-value {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-primary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* ─── PLAYERS CARD ─── */
+    .players-card {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        border-radius: 20px;
+        overflow: hidden;
+        backdrop-filter: blur(20px);
+        transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .players-card:hover {
+        border-color: rgba(0,200,83,0.2);
+        transform: translateY(-3px);
+    }
+
+    .players-card-header {
+        padding: 16px 22px 14px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        background: rgba(255,255,255,0.02);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .players-card-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .player-count-badge {
+        background: rgba(0,200,83,0.1);
+        border: 1px solid rgba(0,200,83,0.25);
+        color: var(--pitch-green);
+        font-size: 11px;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 20px;
+        letter-spacing: 0.3px;
+    }
+
+    .players-list {
+        padding: 14px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        max-height: 480px;
+        overflow-y: auto;
+    }
+
+    .player-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 12px 14px;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 12px;
+        transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    }
+
+    .player-item:hover {
+        background: rgba(0,200,83,0.07);
+        border-color: rgba(0,200,83,0.2);
+        transform: translateX(4px);
+    }
+
+    .player-number {
+        width: 30px;
+        height: 30px;
         border-radius: 8px;
-        text-decoration: none;
-        transition: 0.3s;
+        background: rgba(255,255,255,0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text-muted);
+        flex-shrink: 0;
     }
 
-    .back-btn:hover {
-        background: #388e3c;
+    .player-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, rgba(0,200,83,0.15), rgba(0,180,255,0.1));
+        border: 1px solid rgba(255,255,255,0.07);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        flex-shrink: 0;
     }
+
+    .player-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .player-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-primary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .player-position {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-top: 1px;
+        font-weight: 500;
+        letter-spacing: 0.3px;
+    }
+
+    .position-pill {
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        flex-shrink: 0;
+    }
+
+    .pos-gk  { background: rgba(255,214,0,0.12);  border: 1px solid rgba(255,214,0,0.25);  color: var(--gold); }
+    .pos-def { background: rgba(0,180,255,0.1);   border: 1px solid rgba(0,180,255,0.25);  color: var(--electric-blue); }
+    .pos-mid { background: rgba(168,85,247,0.1);  border: 1px solid rgba(168,85,247,0.25); color: #c084fc; }
+    .pos-fwd { background: rgba(0,200,83,0.1);    border: 1px solid rgba(0,200,83,0.25);   color: var(--pitch-green); }
+    .pos-def { background: rgba(0,180,255,0.1);   border: 1px solid rgba(0,180,255,0.25);  color: var(--electric-blue); }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--text-muted);
+        font-size: 13px;
+    }
+
+    .empty-icon {
+        font-size: 34px;
+        display: block;
+        margin-bottom: 10px;
+        opacity: 0.3;
+    }
+
+    /* scrollbar */
+    .players-list::-webkit-scrollbar { width: 4px; }
+    .players-list::-webkit-scrollbar-track { background: transparent; }
+    .players-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
 </style>
 
-<div class="container">
-
-    <div class="title">🏆 {{ team.name }}</div>
-
-    <!-- Manager Profile -->
-    <div class="card manager-section">
-        {% if manager.image %}
-            <img src="{{ manager.image.url }}" class="manager-img">
-        {% else %}
-            <img src="https://via.placeholder.com/120" class="manager-img">
-        {% endif %}
-
-    <div class="manager-info">
-        <h3>👔 {{ manager.name }}</h3>
-        <p>🙎 Age: {{ manager.age }}</p>
-        <p>📞 Contact: {{ manager.contact }}</p>
-        <p>📩 Email: {{ manager.email }}</p>
+<!-- PAGE HEADER -->
+<div class="page-header">
+    <div style="font-size:11px; color: var(--text-muted); font-weight:500; letter-spacing:0.5px;">
+        League → Teams → {{ team.name }}
     </div>
+    <a href="{% url 'league' %}" class="back-btn">← League Table</a>
+</div>
+
+<!-- TEAM HERO -->
+<div class="team-hero">
+    <div class="team-crest-large">🛡</div>
+    <div class="team-hero-info">
+        <div class="team-eyebrow">Football Club</div>
+        <div class="team-title">{{ team.name }}</div>
+        <div class="team-hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-val">{{ players|length }}</div>
+                <div class="hero-stat-label">Players</div>
+            </div>
+            {% if manager %}
+            <div class="hero-stat">
+                <div class="hero-stat-val" style="font-size:18px; padding-top:4px;">{{ manager.name }}</div>
+                <div class="hero-stat-label">Manager</div>
+            </div>
+            {% endif %}
+        </div>
     </div>
+</div>
 
-    <!-- Players -->
-    <div class="card">
-        <h2>⚽ Players List</h2>
+<!-- DETAIL GRID -->
+<div class="detail-grid">
 
-        <div class="players-list">
-            {% for p in players %}
-                <p>👤 <b>{{ p.name }}</b> — {{ p.position }}</p>
-            {% empty %}
-                <p>No players available</p>
-            {% endfor %}
+    <!-- MANAGER CARD -->
+    <div class="manager-card">
+        <div class="manager-card-header">
+            <div class="section-icon">👔</div>
+            <div class="section-title">Manager</div>
+        </div>
+        <div class="manager-card-body">
+            <div class="manager-avatar-wrap">
+                {% if manager.image %}
+                    <img src="{{ manager.image.url }}" class="manager-img" alt="{{ manager.name }}">
+                {% else %}
+                    <img src="https://ui-avatars.com/api/?name={{ manager.name }}&background=0a1628&color=00b4ff&size=100&bold=true&rounded=true" class="manager-img" alt="{{ manager.name }}">
+                {% endif %}
+                <div class="manager-badge">👔</div>
+            </div>
+
+            <div class="manager-name">{{ manager.name }}</div>
+
+            <div class="manager-details">
+                <div class="detail-row">
+                    <div class="detail-row-icon">🎂</div>
+                    <div class="detail-row-content">
+                        <div class="detail-row-label">Age</div>
+                        <div class="detail-row-value">{{ manager.age }} years old</div>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-row-icon">📞</div>
+                    <div class="detail-row-content">
+                        <div class="detail-row-label">Contact</div>
+                        <div class="detail-row-value">{{ manager.contact }}</div>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-row-icon">📩</div>
+                    <div class="detail-row-content">
+                        <div class="detail-row-label">Email</div>
+                        <div class="detail-row-value">{{ manager.email }}</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Back Button -->
-    <div style="text-align:center;">
-        <a href="{% url 'league' %}" class="back-btn">⬅ Back to League Table</a>
+    <!-- PLAYERS CARD -->
+    <div class="players-card">
+        <div class="players-card-header">
+            <div class="players-card-header-left">
+                <div class="section-icon" style="background: rgba(0,200,83,0.12);">⚽</div>
+                <div class="section-title">Squad</div>
+            </div>
+            {% if players %}
+                <span class="player-count-badge">{{ players|length }} players</span>
+            {% endif %}
+        </div>
+
+        <div class="players-list">
+            {% for p in players %}
+            <div class="player-item">
+                <div class="player-number">{{ forloop.counter }}</div>
+                <div class="player-avatar">👤</div>
+                <div class="player-info">
+                    <div class="player-name">{{ p.name }}</div>
+                    <div class="player-position">{{ p.position }}</div>
+                </div>
+                <span class="position-pill
+                    {% with pos=p.position|lower %}
+                        {% if 'keeper' in pos or 'gk' in pos or 'goal' in pos %}pos-gk
+                        {% elif 'def' in pos or 'back' in pos or 'cb' in pos or 'lb' in pos or 'rb' in pos %}pos-def
+                        {% elif 'mid' in pos or 'cm' in pos or 'dm' in pos or 'am' in pos %}pos-mid
+                        {% elif 'fwd' in pos or 'forward' in pos or 'striker' in pos or 'st' in pos or 'winger' in pos %}pos-fwd
+                        {% else %}pos-mid{% endif %}
+                    {% endwith %}
+                ">{{ p.position }}</span>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <span class="empty-icon">👟</span>
+                No players registered for this team yet.
+            </div>
+            {% endfor %}
+        </div>
     </div>
 
 </div>
