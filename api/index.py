@@ -1,5 +1,6 @@
 import os
 import sys
+from league_project.wsgi import application
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(BASE_DIR)
